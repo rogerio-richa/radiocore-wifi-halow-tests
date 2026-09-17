@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <title>RC32 HaLow field monitor</title>
+    <link rel="stylesheet" href="/dashboard.css">
+    <script src="/dashboard.js" defer></script>
+  </head>
+  <body>
+    <header class="instrument-head">
+      <div class="identity">
+        <span class="model">RC32</span>
+        <span class="instrument-name">HaLow field monitor</span>
+      </div>
+      <section class="path-strip" aria-label="Measured network path">
+        <span>Mac</span>
+        <i aria-hidden="true"></i>
+        <strong>Base RC32</strong>
+        <i class="path-strip__halow" aria-hidden="true"></i>
+        <strong>Portable RC32</strong>
+        <i aria-hidden="true"></i>
+        <span>Phone</span>
+      </section>
+      <div class="status-rail" aria-live="polite">
+        <span class="status-lamp" aria-hidden="true"></span>
+        <strong id="connection-state" data-status="waiting">Waiting</strong>
+        <span class="status-divider" aria-hidden="true"></span>
+        <span id="sample-age">No AP samples</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="live-video" aria-labelledby="live-heading">
+        <header class="panel-head">
+          <div>
+            <span class="source-label">Live feed</span>
+            <h1 id="live-heading">Video comparison</h1>
+          </div>
+          <div class="run-controls" aria-label="Experiment controls">
+            <span id="run-elapsed" class="run-clock">00:00</span>
+            <button id="run-play" class="control control--primary" type="button">CAPTURE</button>
+            <button id="run-stop" class="control" type="button" disabled>STOP</button>
+            <button id="review-runs" class="control" type="button">Review runs</button>
+          </div>
+        </header>
+        <div class="live-video-body">
+          <div class="live-player-wrap">
+            <img id="admin-video-poster" src="/video-poster.jpg" alt="First frame of the source video">
+            <iframe id="live-player" title="Live WebRTC video with elapsed timestamp"
+                    allow="autoplay; fullscreen" allowfullscreen></iframe>
+          </div>
+          <section class="video-setup" aria-label="Video setup">
+            <span class="source-label">Video setup</span>
+            <dl class="metric-bank">
+              <div><dt>Source file</dt><dd><strong id="source-name">—</strong></dd></div>
+              <div><dt>Original resolution</dt><dd><strong id="source-resolution">—</strong></dd></div>
+              <div><dt>WebRTC output</dt><dd><strong id="output-resolution">—</strong></dd></div>
+            </dl>
+          </section>
+        </div>
+        <section id="run-browser" class="run-browser" hidden aria-labelledby="run-browser-heading">
+          <header class="review-head">
+            <div>
+              <span class="source-label">Stored measurements</span>
+              <h2 id="run-browser-heading">Review runs</h2>
+            </div>
+            <div class="review-actions">
+              <a class="download-link" href="/measurements.csv" download>
+                Download AP measurements <span aria-hidden="true">↓</span>
+              </a>
+              <button id="clear-runs" class="control control--danger" type="button">Delete stored runs</button>
+              <button id="exit-review" class="control" type="button">Return live</button>
+            </div>
+          </header>
+          <div class="review-layout">
+            <ol id="run-list" class="run-list" aria-label="Recorded runs"></ol>
+            <div class="review-stage">
+              <span class="source-label">Source reference</span>
+              <video id="review-player" muted playsinline loop preload="metadata" src="/source-video"></video>
+              <div class="review-transport">
+                <button id="review-playback" class="control control--primary" type="button">Play review</button>
+                <input id="review-scrubber" type="range" min="0" max="0" value="0" step="100"
+                       aria-label="Review position">
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+      <div class="telemetry-grid">
+        <section class="telemetry-panel telemetry-panel--ap" aria-labelledby="ap-heading">
+          <header class="panel-head">
+            <div>
+              <span class="source-label">Measured by base firmware</span>
+              <h1 id="ap-heading">HaLow AP traffic</h1>
+            </div>
+            <span class="source-chip">All traffic</span>
+          </header>
+
+          <div class="hero-reading">
+            <span class="hero-reading__label">Total interface throughput</span>
+            <div><strong id="halow-total-value">N/A</strong><span>kbps</span></div>
+          </div>
+
+          <div class="phy-ceiling" aria-label="Theoretical Wi-Fi HaLow physical-layer ceiling">
+            <span>1 MHz MCS7 PHY ceiling</span>
+            <strong id="halow-phy-ceiling-value">3,333 kbps</strong>
+            <small>PHY rate, not usable payload throughput</small>
+          </div>
+
+          <dl class="metric-bank">
+            <div>
+              <dt>Toward phone</dt>
+              <dd><strong id="halow-downlink-value">N/A</strong><span>kbps</span></dd>
+              <small>HaLow downlink</small>
+            </div>
+            <div>
+              <dt>Toward Mac</dt>
+              <dd><strong id="halow-uplink-value">N/A</strong><span>kbps</span></dd>
+              <small>HaLow uplink</small>
+            </div>
+            <div>
+              <dt>HaLow clients</dt>
+              <dd><strong id="halow-clients-value">—</strong></dd>
+              <small>Associated</small>
+            </div>
+            <div>
+              <dt>Radio activity</dt>
+              <dd><strong id="radio-activity-value">—</strong></dd>
+              <small>Last interval</small>
+            </div>
+            <div>
+              <dt>Drop events</dt>
+              <dd><strong id="drops-value">—</strong></dd>
+              <small>Last interval</small>
+            </div>
+          </dl>
+
+          <div class="trace-block">
+            <div class="trace-head">
+              <div>
+                <span class="source-label">AP history</span>
+                <h2>Network-interface throughput</h2>
+              </div>
+              <div class="trace-legend" aria-label="AP chart legend">
+                <span><i class="key key--downlink"></i>Toward phone</span>
+                <span><i class="key key--uplink"></i>Toward Mac</span>
+              </div>
+            </div>
+            <div class="canvas-frame">
+              <canvas id="ap-history-canvas" role="img" aria-label="Rolling HaLow AP throughput toward the phone and Mac">
+                AP traffic history requires Canvas support.
+              </canvas>
+            </div>
+          </div>
+        </section>
+
+        <section class="telemetry-panel telemetry-panel--video" aria-labelledby="video-heading">
+          <header class="panel-head">
+            <div>
+              <span class="source-label">Measured by MediaMTX</span>
+              <h1 id="video-heading">WebRTC video delivery</h1>
+            </div>
+            <span class="source-chip source-chip--video">Per endpoint</span>
+          </header>
+
+          <div class="endpoint-readings">
+            <div class="hero-reading hero-reading--video">
+              <span class="hero-reading__label">LAN delivery</span>
+              <div><strong id="lan-video-bitrate-value">N/A</strong><span>kbps</span></div>
+            </div>
+            <div class="hero-reading hero-reading--halow">
+              <span class="hero-reading__label">HaLow delivery</span>
+              <div><strong id="halow-video-bitrate-value">N/A</strong><span>kbps</span></div>
+            </div>
+          </div>
+
+          <dl class="metric-bank metric-bank--video">
+            <div>
+              <dt>LAN viewers</dt>
+              <dd><strong id="lan-video-viewers-value">—</strong></dd>
+              <small>Direct sessions</small>
+            </div>
+            <div>
+              <dt>HaLow viewers</dt>
+              <dd><strong id="halow-video-viewers-value">—</strong></dd>
+              <small>HaLow sessions</small>
+            </div>
+            <div>
+              <dt>Metrics status</dt>
+              <dd><strong id="video-status-value">Unavailable</strong></dd>
+              <small>Local service</small>
+            </div>
+          </dl>
+
+          <div class="trace-block">
+            <div class="trace-head">
+              <div>
+                <span class="source-label">Video history</span>
+                <h2>WebRTC bytes delivered</h2>
+              </div>
+              <div class="trace-legend" aria-label="Video chart legend">
+                <span><i class="key key--video"></i>LAN delivery</span>
+                <span><i class="key key--halow-video"></i>HaLow delivery</span>
+              </div>
+            </div>
+            <div class="canvas-frame">
+              <canvas id="video-history-canvas" role="img" aria-label="Overlaid LAN and HaLow WebRTC delivery throughput">
+                Video delivery history requires Canvas support.
+              </canvas>
+            </div>
+          </div>
+        </section>
+      </div>
+
+    </main>
+  </body>
+</html>

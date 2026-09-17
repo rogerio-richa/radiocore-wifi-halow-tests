@@ -1,0 +1,4 @@
+# Source videos stay local; only this folder's placeholder files are tracked.
+*
+!.gitignore
+!README.md

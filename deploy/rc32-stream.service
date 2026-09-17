@@ -1,0 +1,21 @@
+[Unit]
+Description=RC32 HaLow video and measurement service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/radiocore
+Environment=HOME=/home/pi
+Environment=RC32_BIND_IP=0.0.0.0
+Environment=RC32_DASHBOARD_BIND=0.0.0.0
+Environment=RC32_VIDEO_ENCODER=h264_v4l2m2m
+ExecStart=/home/pi/radiocore/stream.sh --profile 360p media/kitties-360p.mp4
+Restart=always
+RestartSec=5
+KillMode=control-group
+
+[Install]
+WantedBy=multi-user.target

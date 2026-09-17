@@ -1,0 +1,5 @@
+.scratch/
+lbackup/
+__pycache__/
+.DS_Store
+firmware/rc32_secrets.h

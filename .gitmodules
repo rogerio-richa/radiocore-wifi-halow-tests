@@ -1,0 +1,4 @@
+[submodule "firmware/vendor/ESP_HaLow"]
+	path = firmware/vendor/ESP_HaLow
+	url = https://github.com/rogerio-richa/ESP_HaLow.git
+	branch = radiocore-gateway

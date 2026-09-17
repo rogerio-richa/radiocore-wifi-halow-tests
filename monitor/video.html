@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <title>RC32 live video</title>
+    <link rel="stylesheet" href="/video.css">
+    <script src="/video.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <span class="eyebrow">RC32 HaLow experiment</span>
+          <h1>Live video</h1>
+        </div>
+        <span id="video-state">Waiting for capture</span>
+      </header>
+      <section class="player" aria-label="Live WebRTC video">
+        <img id="video-poster" src="/video-poster.jpg" alt="First frame of the source video">
+        <iframe id="video-player" title="Live WebRTC video" allow="autoplay; fullscreen" allowfullscreen></iframe>
+      </section>
+      <section class="measurements" aria-labelledby="measurements-title">
+        <div class="measurement-heading">
+          <span class="eyebrow">Measured by base firmware</span>
+          <h2 id="measurements-title">HaLow link measurements</h2>
+        </div>
+        <dl>
+          <div class="primary"><dt>Total interface throughput</dt><dd id="total-throughput">N/A <small>kbps</small></dd></div>
+          <div><dt>HaLow clients</dt><dd id="halow-clients">—</dd></div>
+          <div><dt>Radio activity</dt><dd id="radio-activity">—</dd></div>
+          <div><dt>RSSI</dt><dd>N/A</dd><small>Not reported by base firmware</small></div>
+          <div><dt>SNR</dt><dd>N/A</dd><small>Not reported by base firmware</small></div>
+        </dl>
+      </section>
+    </main>
+  </body>
+</html>
