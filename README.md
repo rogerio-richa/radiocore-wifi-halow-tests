@@ -289,7 +289,9 @@ ARDUINO_DIRECTORIES_USER="$PWD/.scratch/arduino/user" \
 
 Before uploading the portable image, confirm with `esptool read_mac` that the USB target is the portable unit, and preserve its current flash. The patched Morse receive archive requires both gateway sketches to export the `halow_mmnetif_input` adapter; this is intentional and allows accepted receive traffic to pass through each active lwIP input callback.
 
-The portable station also has an application-level reconnect guard. If the HaLow association remains down for five seconds, the firmware requests a fresh station association and repeats that request every 15 seconds until the link returns. When the association returns, it reinstalls the HaLow interface as the default route and reattaches traffic accounting before forwarding phone traffic again. The phone-facing access point and NAPT are left running during this process, so a temporary HaLow fade does not require a power cycle or a second gateway setup.
+The portable station also has an application-level reconnect guard. If the HaLow association remains down for five seconds, the firmware requests a fresh station association and repeats that request every 15 seconds until the link returns. When the association returns, it reinstalls the HaLow interface as the default route and reattaches traffic accounting before forwarding phone traffic again. The phone-facing access point and NAPT are left running during this process.
+
+**Known limitation.** Link losses caused by either radio restarting, including outages of about a minute, recover on their own and the stream resumes. A genuine RF fade with both radios still powered (carrying the portable out of range and back) can leave the portable reporting `LINK UP` while no IP traffic crosses the HaLow link; the base still lists the station and transmits to it, but receives nothing. Power-cycling the portable restores the link. The cause has not been identified.
 
 ### Portable T108 display
 
