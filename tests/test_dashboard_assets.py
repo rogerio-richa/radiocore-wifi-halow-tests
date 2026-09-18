@@ -15,16 +15,16 @@ class DashboardParser(HTMLParser):
         self.links = set()
         self.text = []
         self.tag_stack = []
-        self.topology_inside_instrument_header = False
+        self.header_links = set()
 
     def handle_starttag(self, tag, attrs):
         attributes = dict(attrs)
         classes = set(attributes.get("class", "").split())
-        if "path-strip" in classes and any(
+        if tag == "a" and "href" in attributes and any(
             "instrument-head" in ancestor_classes
             for _, ancestor_classes in self.tag_stack
         ):
-            self.topology_inside_instrument_header = True
+            self.header_links.add(attributes["href"])
         if "id" in attributes:
             self.ids.add(attributes["id"])
         if tag == "a" and "href" in attributes:
@@ -148,12 +148,13 @@ class DashboardAssetContractTests(unittest.TestCase):
         self.assertNotIn(".run-browser {\n  border-top:", self.css)
         self.assertIn('aria-pressed', self.javascript)
 
-    def test_topology_is_integrated_into_instrument_header(self):
-        self.assertTrue(self.parser.topology_inside_instrument_header)
+    def test_header_links_to_the_network_path_page_without_a_topology_strip(self):
+        visible_text = " ".join(self.parser.text)
 
-    def test_topology_strip_links_to_the_network_path_page(self):
-        self.assertIn("/admin/path/", self.parser.links)
-        self.assertRegex(self.html, r'<a[^>]+class="path-strip"[^>]+href="/admin/path/"')
+        self.assertIn("/admin/path/", self.parser.header_links)
+        self.assertNotIn("path-strip", self.html)
+        self.assertNotIn("path-strip", self.css)
+        self.assertNotIn("Portable RC32", visible_text)
 
     def test_traffic_directions_use_destination_labels(self):
         visible_text = " ".join(self.parser.text)

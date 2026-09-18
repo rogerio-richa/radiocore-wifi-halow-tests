@@ -36,8 +36,33 @@ body {
   background: var(--ink);
   color: var(--paper);
   display: grid;
-  grid-template-columns: auto minmax(420px, 1fr) auto;
+  grid-template-columns: auto 1fr auto;
   min-height: 50px;
+}
+
+.head-nav {
+  align-items: center;
+  border-left: 1px solid #38505a;
+  display: flex;
+  font-family: var(--data);
+  font-size: 0.6rem;
+  justify-content: flex-end;
+  letter-spacing: 0.04em;
+  padding: 0 18px;
+  text-transform: uppercase;
+}
+
+.head-link {
+  color: #aebdc0;
+  text-decoration: none;
+}
+
+.head-link:hover,
+.head-link:focus-visible {
+  color: var(--paper);
+  outline: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .identity {
@@ -112,55 +137,12 @@ main {
   padding: 12px clamp(12px, 2vw, 28px) 24px;
 }
 
-.path-strip {
-  align-items: center;
-  border-left: 1px solid #38505a;
-  border-right: 1px solid #38505a;
-  color: #aebdc0;
-  display: grid;
-  font-family: var(--data);
-  font-size: 0.56rem;
-  grid-template-columns: auto minmax(24px, 1fr) auto minmax(72px, 2fr) auto minmax(24px, 1fr) auto;
-  letter-spacing: 0.04em;
-  padding: 0 18px;
-  text-transform: uppercase;
-}
 
-.path-strip span,
-.path-strip strong {
-  white-space: nowrap;
-}
 
-.path-strip strong {
-  color: var(--paper);
-}
 
-.path-strip i {
-  background: #60747c;
-  height: 1px;
-  margin: 0 12px;
-  position: relative;
-}
 
-.path-strip i::after {
-  border-bottom: 3px solid transparent;
-  border-left: 5px solid #60747c;
-  border-top: 3px solid transparent;
-  content: "";
-  position: absolute;
-  right: -1px;
-  top: -2px;
-}
 
-.path-strip .path-strip__halow {
-  background: repeating-linear-gradient(90deg, var(--ap) 0 8px, transparent 8px 13px);
-  height: 3px;
-}
 
-.path-strip .path-strip__halow::after {
-  border-left-color: var(--ap);
-  top: -1px;
-}
 
 .telemetry-grid {
   display: grid;
@@ -497,12 +479,12 @@ a:focus-visible {
     display: grid;
     grid-template-areas:
       "identity status"
-      "path path";
+      "nav nav";
     grid-template-columns: 1fr auto;
   }
 
   .identity { grid-area: identity; }
-  .path-strip { grid-area: path; }
+  .head-nav { border-left: 0; border-top: 1px solid #38505a; grid-area: nav; justify-content: flex-start; min-height: 34px; padding: 0 12px; }
   .status-rail { grid-area: status; }
 
   .status-rail {
@@ -515,19 +497,7 @@ a:focus-visible {
     padding: 10px 10px 24px;
   }
 
-  .path-strip {
-    border-left: 0;
-    border-right: 0;
-    border-top: 1px solid #38505a;
-    font-size: 0.52rem;
-    grid-template-columns: auto 1fr auto 1.5fr auto 1fr auto;
-    min-height: 34px;
-    padding: 0 12px;
-  }
 
-  .path-strip i {
-    margin: 0 5px;
-  }
 
   .panel-head,
   .hero-reading {
@@ -584,13 +554,7 @@ a:focus-visible {
     letter-spacing: 0.07em;
   }
 
-  .path-strip span {
-    display: none;
-  }
 
-  .path-strip {
-    grid-template-columns: 0 1fr auto 2fr auto 1fr 0;
-  }
 
   .hero-reading strong {
     font-size: 2.7rem;
@@ -782,23 +746,4 @@ body[data-mode="review"] .live-video > .live-video-body {
   .endpoint-readings .hero-reading:first-child { border-right: 0; }
   .metric-bank--video { grid-template-columns: repeat(2, 1fr); }
   .metric-bank--video > div:last-child { grid-column: 1 / -1; }
-}
-
-/* The header path strip links to the network path explainer. */
-
-a.path-strip {
-  color: #aebdc0;
-  text-decoration: none;
-  transition: background-color 120ms ease;
-}
-
-a.path-strip:hover,
-a.path-strip:focus-visible {
-  background: #203640;
-  outline: none;
-}
-
-a.path-strip:focus-visible strong {
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
