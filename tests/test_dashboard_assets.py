@@ -206,7 +206,7 @@ class NetworkPathPageContractTests(unittest.TestCase):
             "DHCP",
             "802.11ah",
             "WebRTC",
-            "10.41.0.2",
+            "10.41.0.3",
             "10.41.0.1",
             "10.42.0.1",
             "10.42.0.2",

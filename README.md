@@ -155,8 +155,9 @@ The monitor uses only the Python standard library. It binds to `10.41.0.2:8091`,
 ### Raspberry Pi dual-interface host
 
 A Raspberry Pi can replace the Mac as the video and telemetry host. Connect
-`eth0` to the ordinary LAN for administration, join `wlan0` to `RC32-Base` as
-`10.41.0.2/24`, and connect the base RC32 over USB for serial telemetry. Start
+`eth0` to the ordinary LAN for administration, join `wlan0` to `RC32-Base` with a
+static address (the deployed Pi uses `10.41.0.3/24`, leaving `10.41.0.2` for a
+development Mac), and connect the base RC32 over USB for serial telemetry. Start
 the server on every Pi interface so the LAN and HaLow paths reach the same
 encoder and elapsed-time source:
 
@@ -176,7 +177,8 @@ The current Pi 3 test used a 640x360, 15 fps H.264/AAC source and reduced
 FFmpeg CPU use from about two cores to about one third of one core.
 
 While Ethernet is connected, open `http://<Pi-Ethernet-IP>:8091/` from the
-LAN. Across HaLow, open `http://10.41.0.2:8091/`. Both pages play the same
+LAN. Across HaLow, open `http://<Pi-wlan0-IP>:8091/`, which is
+`http://10.41.0.3:8091/` on the deployed Pi. Both pages play the same
 stream. Ethernet can be disconnected after startup; the HaLow address and
 local services remain active. Linux USB serial devices (`/dev/ttyACM*` and
 `/dev/ttyUSB*`) and macOS USB modem devices are auto-detected.

@@ -123,7 +123,7 @@
         <rect class="ph-screen" x="18" y="22" width="124" height="276" rx="14"/>
         <circle class="ph-camera" cx="80" cy="36" r="4"/>
         <rect class="ph-urlbar" x="26" y="52" width="108" height="14" rx="7"/>
-        <text class="ph-url" x="80" y="62" text-anchor="middle">10.41.0.2:8091</text>
+        <text class="ph-url" x="80" y="62" text-anchor="middle">10.41.0.3:8091</text>
         <rect class="ph-video" x="18" y="118" width="124" height="70"/>
         <path class="ph-video-shape" d="M18 188 C 40 150, 62 176, 84 156 S 124 150, 142 170 V 188 Z"/>
         <circle class="ph-video-sun" cx="118" cy="138" r="9"/>
@@ -172,7 +172,7 @@
             <svg class="station-art station-art--pi" role="img" aria-label="Single-board computer"><use href="#sym-pi"/></svg>
             <span class="station-name">Raspberry Pi</span>
             <span class="station-note">Video source and server</span>
-            <span class="station-addr">10.41.0.2</span>
+            <span class="station-addr">10.41.0.3</span>
           </a>
         </li>
         <li class="link link--wifi">
@@ -259,7 +259,7 @@
             <section aria-labelledby="mac-network">
               <h3 id="mac-network">Network</h3>
               <dl>
-                <div><dt>Wi-Fi</dt><dd>wlan0 is joined to the base's ordinary 2.4 GHz network, RC32-Base, as 10.41.0.2.</dd></div>
+                <div><dt>Wi-Fi</dt><dd>wlan0 is joined to the base's ordinary 2.4 GHz network, RC32-Base, as 10.41.0.3.</dd></div>
                 <div><dt>Ethernet</dt><dd>eth0 sits on the ordinary LAN for administration only. It can be unplugged once the stream is running.</dd></div>
                 <div><dt>USB</dt><dd>Powers the base and carries its serial telemetry. USB is not a network link.</dd></div>
                 <div><dt>Isolation</dt><dd>No Internet, no DNS, no STUN or TURN on the RC32 side. Everything the phone plays comes from this board.</dd></div>
@@ -416,7 +416,7 @@
             <section aria-labelledby="phone-runs">
               <h3 id="phone-runs">Runs</h3>
               <dl>
-                <div><dt>Chrome</dt><dd>Opens <code>10.41.0.2:8091/</code>, the video-only page served by the Pi, and plays the WebRTC stream straight from MediaMTX.</dd></div>
+                <div><dt>Chrome</dt><dd>Opens <code>10.41.0.3:8091/</code>, the video-only page served by the Pi, and plays the WebRTC stream straight from MediaMTX.</dd></div>
                 <div><dt>Frame clock</dt><dd>Every frame carries the clock FFmpeg burned in. Comparing it against the same stream on the LAN side shows the delay added by the path.</dd></div>
               </dl>
             </section>
