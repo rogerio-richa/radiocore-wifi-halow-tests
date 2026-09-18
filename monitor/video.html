@@ -7,6 +7,7 @@
     <title>RC32 live video</title>
     <link rel="stylesheet" href="/video.css">
     <script src="/video.js" defer></script>
+    <script src="/clock.js" defer></script>
   </head>
   <body>
     <main>
@@ -15,7 +16,12 @@
           <span class="eyebrow">RC32 HaLow experiment</span>
           <h1>Live video</h1>
         </div>
-        <span id="video-state">Waiting for capture</span>
+        <div class="pi-clock">
+          <span class="eyebrow">Pi clock</span>
+          <strong id="pi-clock">--:--:--</strong>
+          <small id="pi-clock-sync">syncing</small>
+          <span id="video-state">Waiting for capture</span>
+        </div>
       </header>
       <section class="player" aria-label="Live WebRTC video">
         <img id="video-poster" src="/video-poster.jpg" alt="First frame of the source video">

@@ -25,3 +25,10 @@ class VideoAssetContractTests(unittest.TestCase):
         self.assertIn("player.removeAttribute(\"src\")", javascript)
         self.assertIn("poster.hidden = true", javascript)
         self.assertIn("#video-poster[hidden] { display: none; }", (ASSET_ROOT / "video.css").read_text())
+
+    def test_video_only_page_shows_the_synced_pi_clock(self):
+        html = (ASSET_ROOT / "video.html").read_text()
+
+        self.assertIn('id="pi-clock"', html)
+        self.assertIn('id="pi-clock-sync"', html)
+        self.assertIn('<script src="/clock.js" defer></script>', html)

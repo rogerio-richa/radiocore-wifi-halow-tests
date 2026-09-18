@@ -139,6 +139,18 @@ class DashboardAssetContractTests(unittest.TestCase):
         self.assertIn("run-choice--selected", self.javascript)
         self.assertIn("Replay review", self.javascript)
 
+    def test_live_panel_shows_the_synced_pi_clock(self):
+        clock = (ASSET_ROOT / "clock.js").read_text()
+
+        self.assertIn('id="pi-clock"', self.html)
+        self.assertIn('id="pi-clock-sync"', self.html)
+        self.assertIn('<script src="/clock.js" defer></script>', self.html)
+        self.assertIn("/api/time", clock)
+        self.assertIn("utc_offset_seconds", clock)
+        self.assertIn("performance.now()", clock)
+        self.assertNotIn("http://", clock.lower())
+        self.assertNotIn("https://", clock.lower())
+
     def test_review_mode_hides_the_live_video_comparison_content(self):
         self.assertIn('body[data-mode="review"] .live-video > .panel-head', self.css)
         self.assertIn('body[data-mode="review"] .live-video > .live-video-body', self.css)

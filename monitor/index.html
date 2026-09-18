@@ -7,6 +7,7 @@
     <title>RC32 HaLow field monitor</title>
     <link rel="stylesheet" href="/dashboard.css">
     <script src="/dashboard.js" defer></script>
+    <script src="/clock.js" defer></script>
   </head>
   <body>
     <header class="instrument-head">
@@ -31,6 +32,11 @@
           <div>
             <span class="source-label">Live feed</span>
             <h1 id="live-heading">Video comparison</h1>
+          </div>
+          <div class="pi-clock" aria-live="off">
+            <span class="source-label">Pi clock</span>
+            <strong id="pi-clock">--:--:--</strong>
+            <small id="pi-clock-sync">syncing</small>
           </div>
           <div class="run-controls" aria-label="Experiment controls">
             <span id="run-elapsed" class="run-clock">00:00</span>

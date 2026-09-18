@@ -8,6 +8,9 @@ h1 { font-size: clamp(1.4rem, 3vw, 2rem); }
 h2 { font-size: 1.1rem; }
 .eyebrow { color: #4ed3e5; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; }
 #video-state { color: #78f0ac; font-size: .76rem; }
+.pi-clock { display: grid; gap: 2px; justify-items: end; text-align: right; }
+.pi-clock strong { font-family: "SFMono-Regular", Menlo, Consolas, monospace; font-size: 1.9rem; font-variant-numeric: tabular-nums; font-weight: 600; letter-spacing: .02em; line-height: 1; }
+.pi-clock small { color: #8fa4ad; font-family: "SFMono-Regular", Menlo, Consolas, monospace; font-size: .62rem; }
 .player { aspect-ratio: 16 / 9; background: #000; border: 1px solid #25414b; }
 iframe, #video-poster { border: 0; height: 100%; width: 100%; }
 #video-poster { display: block; object-fit: contain; }
@@ -22,4 +25,4 @@ dl > .primary { border-color: #4ed3e5; grid-column: span 2; }
 dt, small { color: #9bb4bc; font-size: .67rem; }
 dd { color: #78f0ac; font-size: 1.1rem; font-weight: 700; margin: 5px 0 2px; }
 dd small { font-size: .7rem; }
-@media (max-width: 700px) { main { padding: 12px; } header { align-items: start; flex-direction: column; gap: 8px; } dl { grid-template-columns: repeat(2, minmax(0, 1fr)); } dl > .primary { grid-column: span 2; } }
+@media (max-width: 700px) { main { padding: 12px; } header { align-items: start; flex-direction: column; gap: 8px; } .pi-clock { justify-items: start; text-align: left; } dl { grid-template-columns: repeat(2, minmax(0, 1fr)); } dl > .primary { grid-column: span 2; } }

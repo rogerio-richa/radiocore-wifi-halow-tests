@@ -191,8 +191,8 @@ if [[ -n "$bitrate_override_kbps" ]]; then
 fi
 
 video_path="${video_argument:-${RC32_VIDEO_PATH:-$script_dir/media/kitties.mp4}}"
-# Frame time is independent of when each viewer connects.
-timestamp_args=()
+# Every frame carries the host's wall clock, HH:MM:SS, independent of when each viewer connects.
+timestamp_args=(--fps "$video_fps")
 if "$ffmpeg_bin" -hide_banner -filters 2>/dev/null | grep -E ' drawtext[[:space:]]' >/dev/null; then
   timestamp_args+=(--drawtext)
 fi

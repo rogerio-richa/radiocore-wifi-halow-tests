@@ -127,8 +127,10 @@
         <rect class="ph-video" x="18" y="118" width="124" height="70"/>
         <path class="ph-video-shape" d="M18 188 C 40 150, 62 176, 84 156 S 124 150, 142 170 V 188 Z"/>
         <circle class="ph-video-sun" cx="118" cy="138" r="9"/>
-        <rect class="ph-clock-box" x="24" y="172" width="64" height="12" rx="1"/>
-        <text class="ph-clock" x="27" y="181">00:01:23.456</text>
+        <rect class="ph-clock-box" x="96" y="98" width="42" height="11" rx="1"/>
+        <text class="ph-clock" x="99" y="107">23:12:12</text>
+        <rect class="ph-clock-box" x="24" y="172" width="46" height="12" rx="1"/>
+        <text class="ph-clock" x="27" y="181">23:12:13</text>
         <rect class="ph-meter" x="30" y="214" width="100" height="6" rx="3"/>
         <rect class="ph-meter ph-meter--fill" x="30" y="214" width="62" height="6" rx="3"/>
         <text class="ph-caption" x="30" y="240">Live video</text>
@@ -251,7 +253,7 @@
               <h3 id="mac-runs">Runs</h3>
               <dl>
                 <div><dt>stream.sh</dt><dd>Launcher. Starts and supervises the three services below and keeps a log of every run. A systemd unit starts it at boot.</dd></div>
-                <div><dt>FFmpeg</dt><dd>Loops the source MP4, scales it to the chosen profile, burns the elapsed <code>HH:MM:SS.mmm</code> clock into every frame, and encodes H.264 Baseline plus Opus with the Pi's hardware encoder. Publishes to MediaMTX over loopback RTSP.</dd></div>
+                <div><dt>FFmpeg</dt><dd>Loops the source MP4, scales it to the chosen profile, burns the Pi's own clock, <code>HH:MM:SS</code>, into every frame, and encodes H.264 Baseline plus Opus with the Pi's hardware encoder. Publishes to MediaMTX over loopback RTSP.</dd></div>
                 <div><dt>MediaMTX</dt><dd>Media server. Takes the RTSP feed and serves it as WebRTC on port 8889 to any viewer, on the LAN or across HaLow. Counts bytes and viewers per session.</dd></div>
                 <div><dt>halow_monitor.py</dt><dd>Reads the base's traffic metrics over USB, stores samples and runs, pulls MediaMTX metrics, and serves the dashboard and this page on port 8091.</dd></div>
               </dl>
@@ -417,7 +419,7 @@
               <h3 id="phone-runs">Runs</h3>
               <dl>
                 <div><dt>Chrome</dt><dd>Opens <code>10.41.0.3:8091/</code>, the video-only page served by the Pi, and plays the WebRTC stream straight from MediaMTX.</dd></div>
-                <div><dt>Frame clock</dt><dd>Every frame carries the clock FFmpeg burned in. Comparing it against the same stream on the LAN side shows the delay added by the path.</dd></div>
+                <div><dt>Frame clock</dt><dd>Every frame carries the Pi's clock as FFmpeg burned it in. The page shows the Pi's clock beside the player, so the difference between the two is the delay added by the path.</dd></div>
               </dl>
             </section>
             <section aria-labelledby="phone-network">

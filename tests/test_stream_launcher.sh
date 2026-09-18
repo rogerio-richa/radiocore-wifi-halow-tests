@@ -148,7 +148,7 @@ for _ in {1..15}; do
 done
 grep -q "is publishing to path 'kitties'" "${persistent_log_dir}/mediamtx.log"
 
-timestamp_filter="$(/usr/bin/python3 "${project_dir}/stream_timestamp.py")"
+timestamp_filter="$(/usr/bin/python3 "${project_dir}/stream_timestamp.py" --fps 30)"
 assert_adjacent_args -vf "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2,fps=30,${timestamp_filter}"
 /usr/bin/python3 - "${test_dir}/health.json" "$webrtc_port" <<'PYTEST'
 import json

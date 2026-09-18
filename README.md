@@ -118,15 +118,20 @@ On the phone, connected to `RC32-HaLow`, open:
 
 - Video-only client page: `http://10.41.0.2:8091/`
 - Measurement dashboard: `http://10.41.0.2:8091/admin/`
-- Network path explainer: `http://10.41.0.2:8091/admin/path/`, also reached by clicking the Mac → Base → Portable → Phone strip in the dashboard header; it draws the Raspberry Pi, both RC32s, and the phone and lists what runs on each for walkthroughs and demonstrations
+- Network path explainer: `http://10.41.0.2:8091/admin/path/`, also reached from the **Network path** link in the dashboard header; it draws the Raspberry Pi, both RC32s, and the phone and lists what runs on each for walkthroughs and demonstrations
 
-The dashboard embeds the live video above the telemetry. Each video frame carries an
-elapsed `HH:MM:SS.mmm` timestamp burned in by FFmpeg. It starts with the encoder,
-continues across source-video loops, and resets when the stream restarts. Open the
-same dashboard on the Mac and phone to compare playback. Align screen recordings
-using a shared real-world event before comparing the visible timestamps; aligning
-by the video itself removes the delay difference. This measures relative playback
-delay, not total capture-to-display latency. Both players count as video viewers.
+The dashboard embeds the live video above the telemetry. Each video frame carries the
+video host's wall clock, `HH:MM:SS` in the host's local time zone, burned in by
+FFmpeg at the moment the frame passes the encoder's filter. Both viewer pages show
+a **Pi clock** readout beside the player: the same host clock, estimated over HTTP
+from `/api/time` using the round trip with the lowest latency, re-synced every
+thirty seconds. The readout never depends on the viewing device's clock; the small
+line under it shows the sync uncertainty (half the best round trip) and how far the
+device's own clock is from the host. Subtract the time burned into the frame from
+the Pi clock on the same screen to read that viewer's one-way delay, encoder to
+display, to the second. Because the burned clock is wall time, it continues across
+source-video loops and does not reset on capture; after local midnight it keeps
+counting past `23` until the stream restarts. Both players count as video viewers.
 The player starts muted; use its controls to enable sound. The standalone monitor's
 `--webrtc-port` option defaults to `8889`; `stream.sh` passes its selected port.
 The video-only root page embeds that internal MediaMTX path and displays the
@@ -137,14 +142,14 @@ reliable values for them.
 Use **CAPTURE** to start one global experiment run from either dashboard. Before
 capture, the live-video frame remains detached; CAPTURE starts a fresh encoder,
 connects every open dashboard to the same WebRTC feed, resets its charts, and
-begins the shared run clock. The burned frame timestamp therefore begins at
-`00:00` for each capture. **STOP** closes the run and detaches the live viewers. **Review runs**
+begins the shared run clock, which is separate from the wall clock burned into
+the frames. **STOP** closes the run and detaches the live viewers. **Review runs**
 replays the stored readings and
 overlaid LAN/HaLow delivery traces; the original MP4 appears as a **Source
 reference** and follows the review clock. It is context rather than a recording of
 either endpoint, so it cannot reproduce browser buffering, freezes, or displayed
-delay. The frame clock visible in external screen recordings remains the evidence
-for comparing endpoint delay. Review provides a **Delete** control for each
+delay. The frame clock and the Pi clock readout visible in screen recordings
+remain the evidence for comparing endpoint delay. Review provides a **Delete** control for each
 completed or interrupted run and **Delete stored runs** for a full reset; both
 leave an active capture intact.
 
@@ -159,7 +164,7 @@ A Raspberry Pi can replace the Mac as the video and telemetry host. Connect
 static address (the deployed Pi uses `10.41.0.3/24`, leaving `10.41.0.2` for a
 development Mac), and connect the base RC32 over USB for serial telemetry. Start
 the server on every Pi interface so the LAN and HaLow paths reach the same
-encoder and elapsed-time source:
+encoder and clock source:
 
 ```bash
 RC32_BIND_IP=0.0.0.0 \
@@ -170,8 +175,10 @@ RC32_VIDEO_ENCODER=h264_v4l2m2m \
 
 `RC32_VIDEO_ENCODER` accepts `libx264` (the portable default) or
 `h264_v4l2m2m` (the Raspberry Pi hardware encoder). On systems with FFmpeg's
-`drawtext` filter, the launcher uses it for the elapsed clock; otherwise it
-uses its font-independent seven-segment renderer. A source already scaled to
+`drawtext` filter, the launcher uses it for the wall clock; otherwise it
+uses its font-independent seven-segment renderer, which reads the wall clock
+through the frame timestamps and then regenerates a constant-rate sequence for
+the encoder. A source already scaled to
 the selected profile avoids repeatedly decoding and scaling 1080p on a Pi 3.
 The current Pi 3 test used a 640x360, 15 fps H.264/AAC source and reduced
 FFmpeg CPU use from about two cores to about one third of one core.
@@ -200,7 +207,7 @@ Useful monitor overrides are:
 --source-video PATH
 ```
 
-The HTTP service exposes only the dashboard assets, measurement endpoints, run lifecycle endpoints below `/api/runs`, `/source-video`, `/events`, `/healthz`, and `/measurements.csv`. It has no upload, directory-listing, command, or firmware endpoint.
+The HTTP service exposes only the dashboard assets, measurement endpoints, run lifecycle endpoints below `/api/runs`, `/api/time`, `/source-video`, `/events`, `/healthz`, and `/measurements.csv`. It has no upload, directory-listing, command, or firmware endpoint.
 
 ## What the monitor measures
 

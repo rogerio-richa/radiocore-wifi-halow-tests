@@ -1082,6 +1082,7 @@ def build_http_server(bind, port, state, assets_dir, source_video=None):
         "/admin/path": (assets_dir / "path.html", "text/html; charset=utf-8"),
         "/admin/path/": (assets_dir / "path.html", "text/html; charset=utf-8"),
         "/path.css": (assets_dir / "path.css", "text/css; charset=utf-8"),
+        "/clock.js": (assets_dir / "clock.js", "text/javascript; charset=utf-8"),
         "/dashboard.js": (
             assets_dir / "dashboard.js",
             "text/javascript; charset=utf-8",
@@ -1132,6 +1133,15 @@ def build_http_server(bind, port, state, assets_dir, source_video=None):
                 return
             if path == "/healthz":
                 self._send_json(state.snapshot(), head_only=head_only)
+                return
+            if path == "/api/time":
+                self._send_json(
+                    {
+                        "epoch_ms": int(time.time() * 1000),
+                        "utc_offset_seconds": time.localtime().tm_gmtoff,
+                    },
+                    head_only=head_only,
+                )
                 return
             if path == "/api/runs" and state.runs is not None:
                 self._send_json(

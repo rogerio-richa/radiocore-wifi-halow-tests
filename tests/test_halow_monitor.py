@@ -695,6 +695,7 @@ class HttpApiTests(unittest.TestCase):
         (self.assets / "index.html").write_text("<h1>dashboard</h1>")
         (self.assets / "path.html").write_text("<h1>network path</h1>")
         (self.assets / "path.css").write_text("body { color: black; }")
+        (self.assets / "clock.js").write_text("console.log('clock')")
         (self.assets / "dashboard.js").write_text("console.log('dashboard')")
         (self.assets / "dashboard.css").write_text("body { color: black; }")
         (self.assets / "video.html").write_text("<h1>video player</h1>")
@@ -763,6 +764,18 @@ class HttpApiTests(unittest.TestCase):
             self.assertIn(b"dashboard", response.read())
         with urllib.request.urlopen(self.base + "/video.js") as response:
             self.assertIn(b"video", response.read())
+
+    def test_time_endpoint_reports_server_clock_and_utc_offset(self):
+        before = int(time.time() * 1000)
+        status, payload = self.get_json("/api/time")
+        after = int(time.time() * 1000)
+
+        self.assertEqual(status, 200)
+        self.assertGreaterEqual(payload["epoch_ms"], before)
+        self.assertLessEqual(payload["epoch_ms"], after)
+        self.assertEqual(payload["utc_offset_seconds"], time.localtime().tm_gmtoff)
+        with urllib.request.urlopen(self.base + "/clock.js") as response:
+            self.assertEqual(response.headers["Content-Type"], "text/javascript; charset=utf-8")
 
     def test_serves_network_path_page_below_admin(self):
         for path in ("/admin/path", "/admin/path/"):
