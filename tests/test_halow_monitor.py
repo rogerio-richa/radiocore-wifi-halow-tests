@@ -693,6 +693,8 @@ class HttpApiTests(unittest.TestCase):
         self.assets = root / "monitor"
         self.assets.mkdir()
         (self.assets / "index.html").write_text("<h1>dashboard</h1>")
+        (self.assets / "path.html").write_text("<h1>network path</h1>")
+        (self.assets / "path.css").write_text("body { color: black; }")
         (self.assets / "dashboard.js").write_text("console.log('dashboard')")
         (self.assets / "dashboard.css").write_text("body { color: black; }")
         (self.assets / "video.html").write_text("<h1>video player</h1>")
@@ -761,6 +763,14 @@ class HttpApiTests(unittest.TestCase):
             self.assertIn(b"dashboard", response.read())
         with urllib.request.urlopen(self.base + "/video.js") as response:
             self.assertIn(b"video", response.read())
+
+    def test_serves_network_path_page_below_admin(self):
+        for path in ("/admin/path", "/admin/path/"):
+            with urllib.request.urlopen(self.base + path) as response:
+                self.assertEqual(response.headers["Content-Type"], "text/html; charset=utf-8")
+                self.assertIn(b"network path", response.read())
+        with urllib.request.urlopen(self.base + "/path.css") as response:
+            self.assertEqual(response.headers["Content-Type"], "text/css; charset=utf-8")
 
     def test_serves_only_fixed_asset_paths_and_rejects_post(self):
         with self.assertRaises(urllib.error.HTTPError) as error:

@@ -3,3 +3,6 @@ lbackup/
 __pycache__/
 .DS_Store
 firmware/rc32_secrets.h
+
+# Playwright MCP screenshots and snapshots
+.playwright-mcp/

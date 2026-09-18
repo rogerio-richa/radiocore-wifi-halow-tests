@@ -1079,6 +1079,9 @@ def build_http_server(bind, port, state, assets_dir, source_video=None):
         "/": (assets_dir / "video.html", "text/html; charset=utf-8"),
         "/admin": (assets_dir / "index.html", "text/html; charset=utf-8"),
         "/admin/": (assets_dir / "index.html", "text/html; charset=utf-8"),
+        "/admin/path": (assets_dir / "path.html", "text/html; charset=utf-8"),
+        "/admin/path/": (assets_dir / "path.html", "text/html; charset=utf-8"),
+        "/path.css": (assets_dir / "path.css", "text/css; charset=utf-8"),
         "/dashboard.js": (
             assets_dir / "dashboard.js",
             "text/javascript; charset=utf-8",

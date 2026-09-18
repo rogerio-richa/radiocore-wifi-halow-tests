@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <title>RC32 network path</title>
+    <link rel="stylesheet" href="/path.css">
+  </head>
+  <body>
+    <svg class="symbol-sheet" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="grad-screen" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#31485a"/>
+          <stop offset="1" stop-color="#1b2a35"/>
+        </linearGradient>
+        <linearGradient id="grad-can" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#d3d9de"/>
+          <stop offset="1" stop-color="#9aa4ad"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Raspberry Pi: the serving host, drawn from above. -->
+      <symbol id="sym-pi" viewBox="0 0 340 240">
+        <rect class="pi-board" x="10" y="20" width="320" height="210" rx="12"/>
+        <g class="pi-holes">
+          <circle cx="26" cy="36" r="5"/><circle cx="314" cy="36" r="5"/>
+          <circle cx="26" cy="214" r="5"/><circle cx="314" cy="214" r="5"/>
+        </g>
+        <g class="pi-traces">
+          <path d="M78 60 V 96 H 128"/>
+          <path d="M88 60 V 104 H 128"/>
+          <path d="M98 60 V 112 H 128"/>
+          <path d="M180 124 H 236 V 90 H 296"/>
+          <path d="M180 132 H 240 V 190 H 296"/>
+          <path d="M154 150 V 200 H 70 V 218"/>
+          <path d="M40 60 V 120 H 128"/>
+        </g>
+        <rect class="pi-header" x="60" y="26" width="204" height="24" rx="2"/>
+        <line class="pi-pins" x1="66" y1="33" x2="258" y2="33"/>
+        <line class="pi-pins" x1="66" y1="43" x2="258" y2="43"/>
+        <g class="pi-can">
+          <rect x="20" y="58" width="30" height="30" rx="3"/>
+          <path class="pi-can-ant" d="M27 64 l6 0 l0 6 l-6 0 l0 6 l6 0 l0 5"/>
+        </g>
+        <rect class="pi-soc" x="128" y="100" width="52" height="52" rx="4"/>
+        <text class="pi-silk" x="154" y="130" text-anchor="middle">SoC</text>
+        <rect class="pi-ram" x="192" y="104" width="44" height="44" rx="3"/>
+        <rect class="pi-sd" x="4" y="112" width="16" height="34" rx="2"/>
+        <g class="pi-port">
+          <rect x="296" y="60" width="38" height="46" rx="3"/>
+          <rect class="pi-port-inset" x="304" y="66" width="24" height="14" rx="1"/>
+          <rect class="pi-port-inset" x="304" y="86" width="24" height="14" rx="1"/>
+          <rect x="296" y="114" width="38" height="46" rx="3"/>
+          <rect class="pi-port-inset" x="304" y="120" width="24" height="14" rx="1"/>
+          <rect class="pi-port-inset" x="304" y="140" width="24" height="14" rx="1"/>
+          <rect x="296" y="168" width="38" height="52" rx="3"/>
+          <rect class="pi-port-inset pi-port-inset--eth" x="303" y="178" width="26" height="32" rx="2"/>
+        </g>
+        <g class="pi-port">
+          <rect x="56" y="222" width="28" height="12" rx="4"/>
+          <rect x="106" y="222" width="24" height="12" rx="2"/>
+          <rect x="146" y="222" width="24" height="12" rx="2"/>
+          <circle cx="212" cy="228" r="7"/>
+        </g>
+        <text class="pi-silk pi-silk--small" x="60" y="200">Pi</text>
+      </symbol>
+
+      <!-- RC32 board: ESP32-S3 plus HT-HC01 HaLow module, external whip antenna. -->
+      <symbol id="sym-rc32-board" viewBox="0 0 260 320">
+        <rect class="rc-whip" x="126" y="6" width="8" height="66" rx="4"/>
+        <path class="rc-sma" d="M118 72 h24 l4 8 h-32 z"/>
+        <rect class="rc-board" x="30" y="80" width="200" height="222" rx="10"/>
+        <g class="rc-holes">
+          <circle cx="44" cy="94" r="4"/><circle cx="216" cy="94" r="4"/>
+          <circle cx="44" cy="288" r="4"/><circle cx="216" cy="288" r="4"/>
+        </g>
+        <g class="rc-traces">
+          <path d="M130 80 V 100"/>
+          <path d="M60 182 V 196 H 70"/>
+          <path d="M100 182 V 196"/>
+          <path d="M140 182 V 200 H 160"/>
+          <path d="M160 250 H 186"/>
+          <path d="M104 268 V 296"/>
+          <path d="M48 200 V 260 H 52"/>
+        </g>
+        <rect class="rc-can" x="50" y="102" width="160" height="78" rx="4"/>
+        <text class="rc-silk rc-silk--can" x="130" y="134" text-anchor="middle">HT-HC01</text>
+        <text class="rc-silk rc-silk--can rc-silk--sub" x="130" y="152" text-anchor="middle">Wi-Fi HaLow</text>
+        <rect class="rc-can" x="50" y="198" width="110" height="70" rx="4"/>
+        <text class="rc-silk rc-silk--can" x="98" y="238" text-anchor="middle">ESP32-S3</text>
+        <path class="rc-meander" d="M146 206 v10 h6 v-10 h6 v10 h6 v-10"/>
+        <g class="rc-led">
+          <circle class="rc-led--link" cx="190" cy="212" r="4"/>
+          <circle class="rc-led--power" cx="190" cy="228" r="4"/>
+        </g>
+        <rect class="rc-usb" x="110" y="296" width="40" height="12" rx="4"/>
+        <text class="rc-silk" x="216" y="276" text-anchor="end">RC32 v1</text>
+      </symbol>
+
+      <symbol id="sym-rc32-base" viewBox="0 0 260 320">
+        <use href="#sym-rc32-board"/>
+        <path class="rc-cable" d="M130 308 v 12"/>
+      </symbol>
+
+      <symbol id="sym-rc32-portable" viewBox="0 0 260 320">
+        <use href="#sym-rc32-board"/>
+        <g class="rc-tft">
+          <rect x="166" y="190" width="56" height="98" rx="4"/>
+          <rect class="rc-tft-glass" x="170" y="194" width="48" height="90" rx="2"/>
+          <text class="rc-tft-line rc-tft-line--up" x="174" y="208">LINK UP</text>
+          <text class="rc-tft-line" x="174" y="221">-24dBm</text>
+          <text class="rc-tft-line" x="174" y="234">WIFI 1</text>
+          <text class="rc-tft-line rc-tft-line--dim" x="174" y="247">CH 41</text>
+          <text class="rc-tft-line rc-tft-line--dim" x="174" y="260">922.5</text>
+          <text class="rc-tft-line rc-tft-line--dim" x="174" y="273">1 MHz</text>
+        </g>
+      </symbol>
+
+      <!-- Viewer: a phone playing the stream, with the burned-in frame clock. -->
+      <symbol id="sym-phone" viewBox="0 0 160 320">
+        <rect class="ph-body" x="10" y="10" width="140" height="300" rx="22"/>
+        <rect class="ph-screen" x="18" y="22" width="124" height="276" rx="14"/>
+        <circle class="ph-camera" cx="80" cy="36" r="4"/>
+        <rect class="ph-urlbar" x="26" y="52" width="108" height="14" rx="7"/>
+        <text class="ph-url" x="80" y="62" text-anchor="middle">10.41.0.2:8091</text>
+        <rect class="ph-video" x="18" y="118" width="124" height="70"/>
+        <path class="ph-video-shape" d="M18 188 C 40 150, 62 176, 84 156 S 124 150, 142 170 V 188 Z"/>
+        <circle class="ph-video-sun" cx="118" cy="138" r="9"/>
+        <rect class="ph-clock-box" x="24" y="172" width="64" height="12" rx="1"/>
+        <text class="ph-clock" x="27" y="181">00:01:23.456</text>
+        <rect class="ph-meter" x="30" y="214" width="100" height="6" rx="3"/>
+        <rect class="ph-meter ph-meter--fill" x="30" y="214" width="62" height="6" rx="3"/>
+        <text class="ph-caption" x="30" y="240">Live video</text>
+        <text class="ph-caption ph-caption--dim" x="30" y="254">HaLow link measurements</text>
+        <rect class="ph-home" x="60" y="290" width="40" height="3" rx="1.5"/>
+      </symbol>
+
+      <!-- Ordinary 2.4 GHz Wi-Fi: short wavelength. -->
+      <symbol id="sym-link-wifi" viewBox="0 0 200 120">
+        <path class="wave wave--wifi" d="M4 60 q8 -22 16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0 t16 0"/>
+      </symbol>
+
+      <!-- Wi-Fi HaLow: long wavelength, the part under test. -->
+      <symbol id="sym-link-halow" viewBox="0 0 400 120">
+        <path class="wave wave--halow-ghost" d="M0 60 q50 -50 100 0 t100 0 t100 0 t100 0"/>
+        <path class="wave wave--halow" d="M0 60 q50 -50 100 0 t100 0 t100 0 t100 0"/>
+      </symbol>
+
+      <!-- USB cable between the Pi and the base: power and serial, not a network link. -->
+      <symbol id="sym-link-usb" viewBox="0 0 200 40">
+        <path class="usb-cable" d="M4 20 H 196"/>
+        <rect class="usb-plug" x="0" y="13" width="14" height="14" rx="2"/>
+        <rect class="usb-plug" x="186" y="13" width="14" height="14" rx="2"/>
+      </symbol>
+    </svg>
+
+    <header class="masthead">
+      <a class="back-link" href="/admin/">Back to the dashboard</a>
+      <h1>What runs on each box</h1>
+      <p>
+        One video is encoded once on the Raspberry Pi. It crosses an ordinary Wi-Fi hop to the base RC32,
+        the Wi-Fi HaLow hop to the portable RC32, and a second ordinary Wi-Fi hop to the phone.
+        Nothing on this path touches the home network or the Internet.
+      </p>
+    </header>
+
+    <section class="bench" aria-label="The five boxes and the links between them">
+      <ol class="bench-row">
+        <li class="station">
+          <a href="#hop-mac">
+            <svg class="station-art station-art--pi" role="img" aria-label="Single-board computer"><use href="#sym-pi"/></svg>
+            <span class="station-name">Raspberry Pi</span>
+            <span class="station-note">Video source and server</span>
+            <span class="station-addr">10.41.0.2</span>
+          </a>
+        </li>
+        <li class="link link--wifi">
+          <svg class="link-art" role="img" aria-label="Ordinary Wi-Fi link"><use href="#sym-link-wifi"/></svg>
+          <svg class="link-art link-art--usb" role="img" aria-label="USB cable"><use href="#sym-link-usb"/></svg>
+          <span class="link-name">RC32-Base</span>
+          <span class="link-note">2.4 GHz, channel 1<br>USB for power and serial</span>
+        </li>
+        <li class="station">
+          <a href="#hop-base">
+            <svg class="station-art station-art--rc32" role="img" aria-label="Base RC32 board"><use href="#sym-rc32-base"/></svg>
+            <span class="station-name">Base RC32</span>
+            <span class="station-note">HaLow access point</span>
+            <span class="station-addr">10.41.0.1 and 10.42.0.1</span>
+          </a>
+        </li>
+        <li class="link link--halow">
+          <a href="#hop-halow">
+            <svg class="link-art" role="img" aria-label="Wi-Fi HaLow link"><use href="#sym-link-halow"/></svg>
+            <span class="link-name">RC32-HaLow-Backbone</span>
+            <span class="link-note">802.11ah, channel 41<br>922.5 MHz, 1 MHz wide</span>
+          </a>
+        </li>
+        <li class="station">
+          <a href="#hop-portable">
+            <svg class="station-art station-art--rc32" role="img" aria-label="Portable RC32 board with status screen"><use href="#sym-rc32-portable"/></svg>
+            <span class="station-name">Portable RC32</span>
+            <span class="station-note">HaLow station, carried around</span>
+            <span class="station-addr">10.42.0.2 and 10.43.0.1</span>
+          </a>
+        </li>
+        <li class="link link--wifi">
+          <svg class="link-art" role="img" aria-label="Ordinary Wi-Fi link"><use href="#sym-link-wifi"/></svg>
+          <span class="link-name">RC32-HaLow</span>
+          <span class="link-note">2.4 GHz, channel 6</span>
+        </li>
+        <li class="station">
+          <a href="#hop-phone">
+            <svg class="station-art station-art--phone" role="img" aria-label="Phone playing the stream"><use href="#sym-phone"/></svg>
+            <span class="station-name">Phone</span>
+            <span class="station-note">WebRTC viewer</span>
+            <span class="station-addr">10.43.0.x by DHCP</span>
+          </a>
+        </li>
+      </ol>
+    </section>
+
+    <main class="boxes">
+      <article class="box" id="hop-mac">
+        <figure class="box-figure">
+          <svg class="box-art box-art--pi" viewBox="0 -44 340 336" role="img" aria-label="Single-board computer with callouts">
+            <use href="#sym-pi" width="340" height="240"/>
+            <g class="callout">
+              <path d="M35 58 V -14"/>
+              <text x="30" y="-22">wlan0 joins RC32-Base</text>
+            </g>
+            <g class="callout">
+              <path d="M315 60 V -14"/>
+              <text x="320" y="-22" text-anchor="end">USB to the base RC32</text>
+            </g>
+            <g class="callout">
+              <path d="M8 146 V 262"/>
+              <text x="4" y="278">storage card</text>
+            </g>
+            <g class="callout">
+              <path d="M315 220 V 262"/>
+              <text x="320" y="278" text-anchor="end">eth0 for administration</text>
+            </g>
+          </svg>
+        </figure>
+        <div class="box-text">
+          <h2>Raspberry Pi</h2>
+          <p class="box-role">The box that serves everything. It is the video source, the encoder, the media server, and the measurement collector all at once. A Mac fills the same role only on the development bench.</p>
+          <div class="box-columns">
+            <section aria-labelledby="mac-runs">
+              <h3 id="mac-runs">Runs</h3>
+              <dl>
+                <div><dt>stream.sh</dt><dd>Launcher. Starts and supervises the three services below and keeps a log of every run. A systemd unit starts it at boot.</dd></div>
+                <div><dt>FFmpeg</dt><dd>Loops the source MP4, scales it to the chosen profile, burns the elapsed <code>HH:MM:SS.mmm</code> clock into every frame, and encodes H.264 Baseline plus Opus with the Pi's hardware encoder. Publishes to MediaMTX over loopback RTSP.</dd></div>
+                <div><dt>MediaMTX</dt><dd>Media server. Takes the RTSP feed and serves it as WebRTC on port 8889 to any viewer, on the LAN or across HaLow. Counts bytes and viewers per session.</dd></div>
+                <div><dt>halow_monitor.py</dt><dd>Reads the base's USB serial telemetry, stores samples and runs, pulls MediaMTX metrics, and serves the dashboard and this page on port 8091.</dd></div>
+              </dl>
+            </section>
+            <section aria-labelledby="mac-network">
+              <h3 id="mac-network">Network</h3>
+              <dl>
+                <div><dt>Wi-Fi</dt><dd>wlan0 is joined to the base's ordinary 2.4 GHz network, RC32-Base, as 10.41.0.2.</dd></div>
+                <div><dt>Ethernet</dt><dd>eth0 sits on the ordinary LAN for administration only. It can be unplugged once the stream is running.</dd></div>
+                <div><dt>USB</dt><dd>Powers the base and carries its serial telemetry. USB is not a network link.</dd></div>
+                <div><dt>Isolation</dt><dd>No Internet, no DNS, no STUN or TURN on the RC32 side. Everything the phone plays comes from this board.</dd></div>
+              </dl>
+            </section>
+          </div>
+        </div>
+      </article>
+
+      <article class="box" id="hop-base">
+        <figure class="box-figure">
+          <svg class="box-art box-art--rc32" viewBox="0 -10 400 400" role="img" aria-label="Base RC32 board with callouts">
+            <use href="#sym-rc32-base" width="260" height="320"/>
+            <g class="callout">
+              <path d="M134 30 H 244"/>
+              <text x="250" y="34">HaLow antenna</text>
+            </g>
+            <g class="callout">
+              <path d="M210 141 H 244"/>
+              <text x="250" y="145">HaLow access point</text>
+            </g>
+            <g class="callout">
+              <path d="M50 233 H 16 V 356"/>
+              <text x="10" y="372">Wi-Fi, DHCP, routing, NAPT</text>
+            </g>
+            <g class="callout">
+              <path d="M130 308 V 340 H 244"/>
+              <text x="250" y="344">USB serial to the Pi</text>
+            </g>
+          </svg>
+        </figure>
+        <div class="box-text">
+          <h2>Base RC32</h2>
+          <p class="box-role">The fixed end of the radio link. It sits next to the Pi and turns the Pi's ordinary Wi-Fi into HaLow.</p>
+          <div class="box-columns">
+            <section aria-labelledby="base-runs">
+              <h3 id="base-runs">Runs</h3>
+              <dl>
+                <div><dt>ESP32-S3</dt><dd>Arduino firmware, <code>base-gateway</code>. Handles ordinary Wi-Fi, DHCP, routing, NAPT, and the serial telemetry stream.</dd></div>
+                <div><dt>HT-HC01</dt><dd>Heltec Wi-Fi HaLow module with a Morse Micro MM6108 transceiver. Powered and initialised by the ESP32-S3 at boot.</dd></div>
+                <div><dt>Traffic accounting</dt><dd>Counts bytes crossing the HaLow interface in each direction every interval and reports the totals over USB serial. These are the “Measured by base firmware” numbers on the dashboard.</dd></div>
+              </dl>
+            </section>
+            <section aria-labelledby="base-network">
+              <h3 id="base-network">Network</h3>
+              <dl>
+                <div><dt>Ordinary Wi-Fi</dt><dd>Access point RC32-Base on channel 1. Hands the Pi its address by DHCP.</dd></div>
+                <div><dt>HaLow</dt><dd>Access point for the backbone network, RC32-HaLow-Backbone, as 10.42.0.1.</dd></div>
+                <div><dt>Routing</dt><dd>Translates traffic between the two networks with NAPT. The HaLow interface is its only onward route.</dd></div>
+              </dl>
+            </section>
+          </div>
+        </div>
+      </article>
+
+      <article class="box box--halow" id="hop-halow">
+        <figure class="box-figure">
+          <svg class="box-art box-art--link" viewBox="0 0 400 120" role="img" aria-label="Wi-Fi HaLow wave"><use href="#sym-link-halow"/></svg>
+          <figcaption>A longer wave for a lower frequency: about 32 cm per wavelength at 922.5 MHz, against 12 cm at 2.4 GHz.</figcaption>
+        </figure>
+        <div class="box-text">
+          <h2>Wi-Fi HaLow hop</h2>
+          <p class="box-role">The part under test. Two radios, one 1 MHz channel, and nothing else on the air.</p>
+          <div class="box-columns">
+            <section aria-labelledby="halow-what">
+              <h3 id="halow-what">What it is</h3>
+              <dl>
+                <div><dt>Sub-GHz Wi-Fi</dt><dd>IEEE 802.11ah operates below 1 GHz. Narrow channels and the lower frequency trade peak speed for reach and propagation.</dd></div>
+                <div><dt>Two nodes only</dt><dd>The backbone subnet 10.42.0.0/24 holds just the base access point and the portable station. Phones and laptops cannot join it directly.</dd></div>
+                <div><dt>PHY ceiling</dt><dd>At 1 MHz and MCS7 the physical-layer rate tops out at 3,333 kbps. That is a modulation limit, not usable payload throughput.</dd></div>
+              </dl>
+            </section>
+            <section aria-labelledby="halow-measured">
+              <h3 id="halow-measured">What is measured</h3>
+              <dl>
+                <div><dt>Interface traffic</dt><dd>The base counts every byte crossing this link, toward the phone and toward the Pi, including non-video traffic.</dd></div>
+                <div><dt>Signal strength</dt><dd>Only the portable station reports a usable RSSI, shown on its own screen. The base access point firmware has no reliable RSSI or SNR, so the dashboard marks them unavailable.</dd></div>
+                <div><dt>Not measured</dt><dd>Raw PHY bitrate, airtime, and RF efficiency. The rig measures sustainable video delivery through this path.</dd></div>
+              </dl>
+            </section>
+          </div>
+        </div>
+      </article>
+
+      <article class="box" id="hop-portable">
+        <figure class="box-figure">
+          <svg class="box-art box-art--rc32" viewBox="0 -10 400 400" role="img" aria-label="Portable RC32 board with status screen and callouts">
+            <use href="#sym-rc32-portable" width="260" height="320"/>
+            <g class="callout">
+              <path d="M134 30 H 244"/>
+              <text x="250" y="34">HaLow antenna</text>
+            </g>
+            <g class="callout">
+              <path d="M210 141 H 244"/>
+              <text x="250" y="145">HaLow station</text>
+            </g>
+            <g class="callout">
+              <path d="M222 239 H 244"/>
+              <text x="250" y="243">status screen</text>
+            </g>
+            <g class="callout">
+              <path d="M50 233 H 16 V 356"/>
+              <text x="10" y="372">Wi-Fi, DHCP, NAPT for the phone</text>
+            </g>
+          </svg>
+        </figure>
+        <div class="box-text">
+          <h2>Portable RC32</h2>
+          <p class="box-role">The end that walks away. It carries its own small screen so the link can be judged without a laptop.</p>
+          <div class="box-columns">
+            <section aria-labelledby="portable-runs">
+              <h3 id="portable-runs">Runs</h3>
+              <dl>
+                <div><dt>ESP32-S3</dt><dd>Arduino firmware, <code>portable-gateway</code>. Same gateway duties as the base, mirrored: ordinary Wi-Fi, DHCP, routing, NAPT.</dd></div>
+                <div><dt>HT-HC01</dt><dd>Same HaLow module as the base, running as a station joined to RC32-HaLow-Backbone with the fixed address 10.42.0.2.</dd></div>
+                <div><dt>Reconnect policy</dt><dd>Five seconds after the HaLow association drops it asks to rejoin, then retries every fifteen seconds. The phone-facing Wi-Fi stays up throughout.</dd></div>
+                <div><dt>Status screen</dt><dd>128×220 colour panel with one fixed high-contrast page: <code>LINK UP</code> or <code>SEARCH</code>, station RSSI, Wi-Fi client count, channel 41, 922.5 MHz, 1 MHz.</dd></div>
+              </dl>
+            </section>
+            <section aria-labelledby="portable-network">
+              <h3 id="portable-network">Network</h3>
+              <dl>
+                <div><dt>HaLow</dt><dd>Station on the backbone. Its default route points at the base.</dd></div>
+                <div><dt>Ordinary Wi-Fi</dt><dd>Access point RC32-HaLow on channel 6. Hands the phone an address on 10.43.0.0/24 by DHCP.</dd></div>
+                <div><dt>Routing</dt><dd>Second NAPT. The phone's traffic leaves toward the Pi with the portable's HaLow address as its source.</dd></div>
+              </dl>
+            </section>
+          </div>
+        </div>
+      </article>
+
+      <article class="box" id="hop-phone">
+        <figure class="box-figure">
+          <svg class="box-art box-art--phone" viewBox="-100 0 400 330" role="img" aria-label="Phone with callouts">
+            <use href="#sym-phone" width="160" height="320"/>
+            <g class="callout">
+              <path d="M142 59 H 154"/>
+              <text x="160" y="63">served by the Pi</text>
+            </g>
+            <g class="callout">
+              <path d="M142 153 H 154"/>
+              <text x="160" y="157">WebRTC from MediaMTX</text>
+            </g>
+            <g class="callout">
+              <path d="M24 178 H -16"/>
+              <text x="-22" y="182" text-anchor="end">frame clock</text>
+            </g>
+          </svg>
+        </figure>
+        <div class="box-text">
+          <h2>Phone</h2>
+          <p class="box-role">The far end of the path. An ordinary Android phone in Chrome, nothing installed.</p>
+          <div class="box-columns">
+            <section aria-labelledby="phone-runs">
+              <h3 id="phone-runs">Runs</h3>
+              <dl>
+                <div><dt>Chrome</dt><dd>Opens <code>10.41.0.2:8091/</code>, the video-only page served by the Pi, and plays the WebRTC stream straight from MediaMTX.</dd></div>
+                <div><dt>Frame clock</dt><dd>Every frame carries the clock FFmpeg burned in. Comparing it against the same stream on the LAN side shows the delay added by the path.</dd></div>
+              </dl>
+            </section>
+            <section aria-labelledby="phone-network">
+              <h3 id="phone-network">Network</h3>
+              <dl>
+                <div><dt>Ordinary Wi-Fi</dt><dd>Joined to RC32-HaLow. Android warns that the network has no Internet; the phone must stay connected anyway.</dd></div>
+                <div><dt>Direction</dt><dd>The phone always initiates. Two layers of NAPT mean the Pi cannot open a connection to the phone.</dd></div>
+              </dl>
+            </section>
+          </div>
+        </div>
+      </article>
+
+      <section class="meters" aria-labelledby="meters-heading">
+        <h2 id="meters-heading">Where the dashboard numbers come from</h2>
+        <div class="box-columns">
+          <section class="meter meter--ap" aria-labelledby="meter-ap">
+            <h3 id="meter-ap">HaLow AP traffic</h3>
+            <p>Counted by the base firmware at the HaLow interface and sent to the Pi over USB serial. It sees all traffic on the link, video or not, and it is the only number that describes the radio hop itself.</p>
+          </section>
+          <section class="meter meter--video" aria-labelledby="meter-video">
+            <h3 id="meter-video">WebRTC video delivery</h3>
+            <p>Counted by MediaMTX on the Pi for each viewer session, split into LAN viewers and viewers arriving through HaLow. It describes application delivery, so it is shown beside the interface number, never added to it.</p>
+          </section>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

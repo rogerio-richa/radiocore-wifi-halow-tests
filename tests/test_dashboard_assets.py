@@ -151,6 +151,10 @@ class DashboardAssetContractTests(unittest.TestCase):
     def test_topology_is_integrated_into_instrument_header(self):
         self.assertTrue(self.parser.topology_inside_instrument_header)
 
+    def test_topology_strip_links_to_the_network_path_page(self):
+        self.assertIn("/admin/path/", self.parser.links)
+        self.assertRegex(self.html, r'<a[^>]+class="path-strip"[^>]+href="/admin/path/"')
+
     def test_traffic_directions_use_destination_labels(self):
         visible_text = " ".join(self.parser.text)
 
@@ -172,6 +176,65 @@ class DashboardAssetContractTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, combined)
         self.assertIsNone(re.search(r"<script[^>]+src=[\"'](?:/|\.)?[^\"']*[?&]", self.html))
+
+
+class NetworkPathPageContractTests(unittest.TestCase):
+    def setUp(self):
+        self.html = (ASSET_ROOT / "path.html").read_text()
+        self.css = (ASSET_ROOT / "path.css").read_text()
+        self.parser = DashboardParser()
+        self.parser.feed(self.html)
+        self.visible_text = " ".join(self.parser.text)
+
+    def test_page_describes_every_hop_in_path_order(self):
+        for hop_id in ("hop-mac", "hop-base", "hop-halow", "hop-portable", "hop-phone"):
+            self.assertIn(hop_id, self.parser.ids)
+        self.assertLess(self.html.index('id="hop-mac"'), self.html.index('id="hop-base"'))
+        self.assertLess(self.html.index('id="hop-base"'), self.html.index('id="hop-halow"'))
+        self.assertLess(self.html.index('id="hop-halow"'), self.html.index('id="hop-portable"'))
+        self.assertLess(self.html.index('id="hop-portable"'), self.html.index('id="hop-phone"'))
+
+    def test_page_names_what_runs_on_each_box(self):
+        for label in (
+            "Raspberry Pi",
+            "FFmpeg",
+            "MediaMTX",
+            "halow_monitor.py",
+            "ESP32-S3",
+            "HT-HC01",
+            "NAPT",
+            "DHCP",
+            "802.11ah",
+            "WebRTC",
+            "10.41.0.2",
+            "10.41.0.1",
+            "10.42.0.1",
+            "10.42.0.2",
+            "10.43.0.1",
+            "RC32-Base",
+            "RC32-HaLow-Backbone",
+            "RC32-HaLow",
+            "922.5",
+            "1 MHz",
+        ):
+            self.assertIn(label, self.visible_text)
+
+    def test_page_links_back_to_the_dashboard_and_has_its_own_stylesheet(self):
+        self.assertIn("/admin/", self.parser.links)
+        self.assertIn('href="/path.css"', self.html)
+        self.assertNotIn("dashboard.css", self.html)
+        self.assertIn("prefers-reduced-motion", self.css)
+
+    def test_page_draws_every_box_and_link_as_inline_svg(self):
+        for symbol in ("sym-pi", "sym-rc32-base", "sym-rc32-portable", "sym-phone", "sym-link-wifi", "sym-link-halow"):
+            self.assertIn('id="%s"' % symbol, self.html)
+            self.assertIn('href="#%s"' % symbol, self.html)
+        self.assertNotIn("<img", self.html)
+
+    def test_page_omits_secrets_and_external_assets(self):
+        lowered = "\n".join((self.html, self.css)).lower()
+        for forbidden in ("http://", "https://", "@import", "analytics", "passphrase:", "<script"):
+            self.assertNotIn(forbidden, lowered)
 
 
 if __name__ == "__main__":

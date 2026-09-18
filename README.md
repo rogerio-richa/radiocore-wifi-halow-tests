@@ -118,6 +118,7 @@ On the phone, connected to `RC32-HaLow`, open:
 
 - Video-only client page: `http://10.41.0.2:8091/`
 - Measurement dashboard: `http://10.41.0.2:8091/admin/`
+- Network path explainer: `http://10.41.0.2:8091/admin/path/`, also reached by clicking the Mac → Base → Portable → Phone strip in the dashboard header; it draws the Raspberry Pi, both RC32s, and the phone and lists what runs on each for walkthroughs and demonstrations
 
 The dashboard embeds the live video above the telemetry. Each video frame carries an
 elapsed `HH:MM:SS.mmm` timestamp burned in by FFmpeg. It starts with the encoder,
