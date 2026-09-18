@@ -255,7 +255,7 @@
                 <div><dt>stream.sh</dt><dd>Launcher. Starts and supervises the three services below and keeps a log of every run. A systemd unit starts it at boot.</dd></div>
                 <div><dt>FFmpeg</dt><dd>Loops the source MP4, scales it to the chosen profile, burns the Pi's own clock, <code>HH:MM:SS</code>, into every frame, and encodes H.264 Baseline plus Opus with the Pi's hardware encoder. Publishes to MediaMTX over loopback RTSP.</dd></div>
                 <div><dt>MediaMTX</dt><dd>Media server. Takes the RTSP feed and serves it as WebRTC on port 8889 to any viewer, on the LAN or across HaLow. Counts bytes and viewers per session.</dd></div>
-                <div><dt>halow_monitor.py</dt><dd>Reads the base's traffic metrics over USB, stores samples and runs, pulls MediaMTX metrics, and serves the dashboard and this page on port 8091.</dd></div>
+                <div><dt>halow_monitor.py</dt><dd>Reads the base's traffic metrics over USB, stores samples and runs, pulls MediaMTX metrics, and serves the dashboard and this page on port 8091. It also answers the time requests the viewer pages use to show the Pi clock.</dd></div>
               </dl>
             </section>
             <section aria-labelledby="mac-network">
@@ -419,7 +419,8 @@
               <h3 id="phone-runs">Runs</h3>
               <dl>
                 <div><dt>Chrome</dt><dd>Opens <code>10.41.0.3:8091/</code>, the video-only page served by the Pi, and plays the WebRTC stream straight from MediaMTX.</dd></div>
-                <div><dt>Frame clock</dt><dd>Every frame carries the Pi's clock as FFmpeg burned it in. The page shows the Pi's clock beside the player, so the difference between the two is the delay added by the path.</dd></div>
+                <div><dt>Pi clock</dt><dd>The page estimates the Pi's clock over HTTP, keeping the round trip with the lowest latency, and shows it beside the player with its uncertainty. It never relies on the phone's own clock.</dd></div>
+                <div><dt>Frame clock</dt><dd>Every frame carries the Pi's clock as FFmpeg burned it in, to the second. Pi clock on screen minus the time in the frame is this viewer's one-way delay, encoder to display.</dd></div>
               </dl>
             </section>
             <section aria-labelledby="phone-network">
