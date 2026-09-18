@@ -147,7 +147,7 @@
         <path class="wave wave--halow" d="M0 60 q50 -50 100 0 t100 0 t100 0 t100 0"/>
       </symbol>
 
-      <!-- USB cable between the Pi and the base: power and serial, not a network link. -->
+      <!-- USB cable between the Pi and the base: power one way, metrics the other, not a network link. -->
       <symbol id="sym-link-usb" viewBox="0 0 200 40">
         <path class="usb-cable" d="M4 20 H 196"/>
         <rect class="usb-plug" x="0" y="13" width="14" height="14" rx="2"/>
@@ -177,9 +177,9 @@
         </li>
         <li class="link link--wifi">
           <svg class="link-art" role="img" aria-label="Ordinary Wi-Fi link"><use href="#sym-link-wifi"/></svg>
-          <svg class="link-art link-art--usb" role="img" aria-label="USB cable"><use href="#sym-link-usb"/></svg>
+          <svg class="link-art link-art--usb" role="img" aria-label="USB cable carrying power and metrics"><use href="#sym-link-usb"/></svg>
           <span class="link-name">RC32-Base</span>
-          <span class="link-note">2.4 GHz, channel 1<br>USB for power and serial</span>
+          <span class="link-note">2.4 GHz, channel 1<br>USB for power and metrics</span>
         </li>
         <li class="station">
           <a href="#hop-base">
@@ -231,7 +231,7 @@
             </g>
             <g class="callout">
               <path d="M315 60 V -14"/>
-              <text x="320" y="-22" text-anchor="end">USB to the base RC32</text>
+              <text x="320" y="-22" text-anchor="end">USB: power out, metrics in</text>
             </g>
             <g class="callout">
               <path d="M8 146 V 262"/>
@@ -253,7 +253,7 @@
                 <div><dt>stream.sh</dt><dd>Launcher. Starts and supervises the three services below and keeps a log of every run. A systemd unit starts it at boot.</dd></div>
                 <div><dt>FFmpeg</dt><dd>Loops the source MP4, scales it to the chosen profile, burns the elapsed <code>HH:MM:SS.mmm</code> clock into every frame, and encodes H.264 Baseline plus Opus with the Pi's hardware encoder. Publishes to MediaMTX over loopback RTSP.</dd></div>
                 <div><dt>MediaMTX</dt><dd>Media server. Takes the RTSP feed and serves it as WebRTC on port 8889 to any viewer, on the LAN or across HaLow. Counts bytes and viewers per session.</dd></div>
-                <div><dt>halow_monitor.py</dt><dd>Reads the base's USB serial telemetry, stores samples and runs, pulls MediaMTX metrics, and serves the dashboard and this page on port 8091.</dd></div>
+                <div><dt>halow_monitor.py</dt><dd>Reads the base's traffic metrics over USB, stores samples and runs, pulls MediaMTX metrics, and serves the dashboard and this page on port 8091.</dd></div>
               </dl>
             </section>
             <section aria-labelledby="mac-network">
@@ -261,7 +261,7 @@
               <dl>
                 <div><dt>Wi-Fi</dt><dd>wlan0 is joined to the base's ordinary 2.4 GHz network, RC32-Base, as 10.41.0.3.</dd></div>
                 <div><dt>Ethernet</dt><dd>eth0 sits on the ordinary LAN for administration only. It can be unplugged once the stream is running.</dd></div>
-                <div><dt>USB</dt><dd>Powers the base and carries its serial telemetry. USB is not a network link.</dd></div>
+                <div><dt>USB</dt><dd>Powers the base and brings its HaLow traffic metrics back once a second. USB is not a network link.</dd></div>
                 <div><dt>Isolation</dt><dd>No Internet, no DNS, no STUN or TURN on the RC32 side. Everything the phone plays comes from this board.</dd></div>
               </dl>
             </section>
@@ -287,7 +287,7 @@
             </g>
             <g class="callout">
               <path d="M130 308 V 340 H 244"/>
-              <text x="250" y="344">USB serial to the Pi</text>
+              <text x="250" y="344">USB metrics to the Pi</text>
             </g>
           </svg>
         </figure>
@@ -298,9 +298,9 @@
             <section aria-labelledby="base-runs">
               <h3 id="base-runs">Runs</h3>
               <dl>
-                <div><dt>ESP32-S3</dt><dd>Arduino firmware, <code>base-gateway</code>. Handles ordinary Wi-Fi, DHCP, routing, NAPT, and the serial telemetry stream.</dd></div>
+                <div><dt>ESP32-S3</dt><dd>Arduino firmware, <code>base-gateway</code>. Handles ordinary Wi-Fi, DHCP, routing, NAPT, and the metrics stream over USB.</dd></div>
                 <div><dt>HT-HC01</dt><dd>Heltec Wi-Fi HaLow module with a Morse Micro MM6108 transceiver. Powered and initialised by the ESP32-S3 at boot.</dd></div>
-                <div><dt>Traffic accounting</dt><dd>Counts bytes crossing the HaLow interface in each direction every interval and reports the totals over USB serial. These are the “Measured by base firmware” numbers on the dashboard.</dd></div>
+                <div><dt>Traffic accounting</dt><dd>Counts bytes crossing the HaLow interface in each direction every second and sends the totals to the Pi over USB. These are the “Measured by base firmware” numbers on the dashboard.</dd></div>
               </dl>
             </section>
             <section aria-labelledby="base-network">
@@ -436,7 +436,7 @@
         <div class="box-columns">
           <section class="meter meter--ap" aria-labelledby="meter-ap">
             <h3 id="meter-ap">HaLow AP traffic</h3>
-            <p>Counted by the base firmware at the HaLow interface and sent to the Pi over USB serial. It sees all traffic on the link, video or not, and it is the only number that describes the radio hop itself.</p>
+            <p>Counted by the base firmware at the HaLow interface and sent to the Pi over USB. It sees all traffic on the link, video or not, and it is the only number that describes the radio hop itself.</p>
           </section>
           <section class="meter meter--video" aria-labelledby="meter-video">
             <h3 id="meter-video">WebRTC video delivery</h3>
